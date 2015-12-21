@@ -1,7 +1,0 @@
-﻿; Test_VSPackage2.def : Declares the module parameters.
-
-LIBRARY      "Test_VSPackage2.DLL"
-
-EXPORTS
-	DllCanUnloadNow            PRIVATE
-	DllGetClassObject          PRIVATE
