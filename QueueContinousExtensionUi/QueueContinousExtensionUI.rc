@@ -1,0 +1,167 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "1000  CTMENU       ""PackageCommands.cto""\r\n"
+    "#define VER_FILEDESCRIPTION_STR ""QueueContinousExtension Package Resources\\0""\r\n"
+    "#define VER_INTERNALNAME_STR ""QueueContinousExtensionUI.dll\\0""\r\n"
+    "#define VER_ORIGINALFILENAME_STR ""QueueContinousExtensionUI.dll\\0""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDB_IMAGES              PNG                     "Images.png"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_PACKAGE_ICON        ICON                    "Package.ico"
+
+IDI_FILE_ICON           ICON                    "File.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_QueueContinousExtension_DLG DIALOGEX 0, 0, 140, 213
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "&Queue Continous",IDC_CLICKME_BTN,27,92,84,36
+    LTEXT           "Solution:",IDC_STATIC,7,9,29,8
+    LTEXT           "Solution Dir:",IDC_STATIC,7,24,40,8
+    LTEXT           "Branch:",IDC_STATIC,7,40,26,8
+    LTEXT           "Static",IDC_STATIC_SOLUTION,53,10,83,8
+    LTEXT           "Static",IDC_STATIC_SOLUTIONDIR,53,24,83,8
+    LTEXT           "Static",IDC_STATIC_BRANCH,53,41,83,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_QueueContinousExtension_DLG, DIALOG
+    BEGIN
+        RIGHTMARGIN, 80
+        BOTTOMMARGIN, 80
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_QueueContinousExtension_DLG AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_OFFICIALNAME        "Queue Continous"
+    IDS_PRODUCTDETAILS      "This extension will allow you to queue a continous build of your branch right from Visual Studio! :)"
+    IDS_COMPANYNAME         "TechSmith"
+    IDS_VERSION             "1.0"
+    IDS_EDITOR_NAME         "QueueContinousExtension"
+    IDS_DEFAULT_NAME        "QueueContinous.queuecontinousextension"
+    IDS_EDITORCAPTION       "queuecontinousextension Editor"
+    IDS_FILE_DESCRIPTION    "QueueContinousExtension File (queuecontinousextension)"
+    IDS_READONLY            " [Read Only]"
+    IDS_FORMATSTR           "QueueContinousExtension files (*.queuecontinousextension)\n*.queuecontinousextension\n\n"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_OUTSIDEEDITORFILECHANGE 
+                            "This file has changed outside the editor. Do you wish to reload it?"
+    IDS_NEWFILE_TEMPLATES_ENTRY "QueueContinousExtension Files"
+    IDS_WINDOW_TITLE        "Queue Continous Window"
+    IDS_E_CANTCREATETOOL    "Unable to create the tool"
+    IDS_E_GETVIEWOBJECT_CALLED_AGAIN 
+                            "GetViewObject was unexpectedly called more then once."
+    IDS_BUTTONCLICK_MESSAGE "Inside QueueContinousExtensionWindowPane::OnButtonClick"
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+1000  CTMENU       "PackageCommands.cto"
+#define VER_FILEDESCRIPTION_STR "QueueContinousExtension Package Resources\0"
+#define VER_INTERNALNAME_STR "QueueContinousExtensionUI.dll\0"
+#define VER_ORIGINALFILENAME_STR "QueueContinousExtensionUI.dll\0"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

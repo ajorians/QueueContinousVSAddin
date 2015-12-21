@@ -1,0 +1,7 @@
+﻿; QueueContinousExtension.def : Declares the module parameters.
+
+LIBRARY      "QueueContinousExtension.DLL"
+
+EXPORTS
+	DllCanUnloadNow            PRIVATE
+	DllGetClassObject          PRIVATE
