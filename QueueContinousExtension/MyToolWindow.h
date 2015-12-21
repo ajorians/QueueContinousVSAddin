@@ -79,6 +79,9 @@ END_MSG_MAP()
       HRESULT hr = spIVsSolution->AdviseSolutionEvents( ( IVsSolutionEvents* )this, &m_SolutionCookie );
 
       m_Timer = ::SetTimer( m_hWnd, 1234, 30'000, OnTimer );
+
+      SetDlgItemText( IDC_EDIT_USERNAME, _T( "a.orians" ) );
+      SetDlgItemText( IDC_EDIT_PASSWORD, _T( "1!Smajjmd" ) );
 	}
 
 	// Function called by VsWindowPaneFromResource at the end of ClosePane.
@@ -304,7 +307,18 @@ END_MSG_MAP()
       CString strCurrentBranch = GetCurrentBranch();
       CT2CA pszConvertedAnsiString( strCurrentBranch );
       std::string strStd( pszConvertedAnsiString );
-      QueueBuild( pTeamCity, strStd.c_str(), "a.orians", "1!Smajjmd" );
+
+      CString strUsername, strPassword;
+      GetDlgItemText( IDC_EDIT_USERNAME, strUsername );
+      GetDlgItemText( IDC_EDIT_PASSWORD, strPassword );
+
+      CT2CA pszConvertedAnsiUserString( strUsername );
+      std::string strStdUsername( pszConvertedAnsiUserString );
+
+      CT2CA pszConvertedAnsiPassString( strPassword );
+      std::string strStdPassword( pszConvertedAnsiPassString );
+
+      QueueBuild( pTeamCity, strStd.c_str(), strStdUsername.c_str(), strStdPassword.c_str() );
 
       TeamCityFreeFunc FreeAPI = (TeamCityFreeFunc)library.Resolve( "TeamCityFree" );
       if ( !FreeAPI )
