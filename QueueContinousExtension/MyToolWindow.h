@@ -80,8 +80,8 @@ END_MSG_MAP()
 
       m_Timer = ::SetTimer( m_hWnd, 1234, 30'000, OnTimer );
 
-      SetDlgItemText( IDC_EDIT_USERNAME, _T( "a.orians" ) );
-      SetDlgItemText( IDC_EDIT_PASSWORD, _T( "1!Smajjmd" ) );
+      ::SetDlgItemText( m_hWnd, IDC_EDIT_USERNAME, _T( "a.orians" ) );
+      ::SetDlgItemText( m_hWnd, IDC_EDIT_PASSWORD, _T( "1!Smajjmd" ) );
 	}
 
 	// Function called by VsWindowPaneFromResource at the end of ClosePane.
@@ -309,8 +309,10 @@ END_MSG_MAP()
       std::string strStd( pszConvertedAnsiString );
 
       CString strUsername, strPassword;
-      GetDlgItemText( IDC_EDIT_USERNAME, strUsername );
-      GetDlgItemText( IDC_EDIT_PASSWORD, strPassword );
+      ::GetDlgItemText( m_hWnd, IDC_EDIT_USERNAME, strUsername.GetBuffer(MAX_PATH), MAX_PATH );
+      ::GetDlgItemText( m_hWnd, IDC_EDIT_PASSWORD, strPassword.GetBuffer( MAX_PATH ), MAX_PATH );
+      strUsername.ReleaseBuffer();
+      strPassword.ReleaseBuffer();
 
       CT2CA pszConvertedAnsiUserString( strUsername );
       std::string strStdUsername( pszConvertedAnsiUserString );
