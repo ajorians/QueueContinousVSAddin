@@ -416,14 +416,9 @@ END_MSG_MAP()
          return false;
 
       CString strCurrentBranch = GetCurrentBranch();
+      AppendText( L"Queueing a build on branch: " + strCurrentBranch );
       CT2CA pszConvertedAnsiString( strCurrentBranch );
       std::string strStd( pszConvertedAnsiString );
-
-      /*CString strUsername, strPassword;
-      ::GetDlgItemText( m_hWnd, IDC_EDIT_USERNAME, strUsername.GetBuffer(MAX_PATH), MAX_PATH );
-      ::GetDlgItemText( m_hWnd, IDC_EDIT_PASSWORD, strPassword.GetBuffer( MAX_PATH ), MAX_PATH );
-      strUsername.ReleaseBuffer();
-      strPassword.ReleaseBuffer();*/
 
       CT2CA pszConvertedAnsiUserString( m_strUsername );
       std::string strStdUsername( pszConvertedAnsiUserString );
@@ -431,8 +426,10 @@ END_MSG_MAP()
       CT2CA pszConvertedAnsiPassString( m_strPassword );
       std::string strStdPassword( pszConvertedAnsiPassString );
 
-      QueueBuild( pTeamCity, strStd.c_str(), strStdUsername.c_str(), strStdPassword.c_str() );
-      AppendText( L"QueueBuild called" );
+      int nRet = QueueBuild( pTeamCity, strStd.c_str(), strStdUsername.c_str(), strStdPassword.c_str() );
+      CString strMessage;
+      strMessage.Format( L"Queued build result: %d", nRet );
+      AppendText( strMessage );
 
       TeamCityFreeFunc FreeAPI = (TeamCityFreeFunc)library.Resolve( "TeamCityFree" );
       if ( !FreeAPI )

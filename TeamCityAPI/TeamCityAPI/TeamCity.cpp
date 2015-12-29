@@ -38,8 +38,7 @@ TEAMCITY_EXTERN int TeamCityQueueBuild( TeamCityAPI api, const char* pstrBranchN
 {
    std::string strBranchname( pstrBranchName ), strUsername( pstrUsername ), strPassword( pstrPassword );
    TeamCity* pTeamCity = (TeamCity*)api;
-   pTeamCity->QueueBuild( strBranchname, strUsername, strPassword );
-   return 0;
+   return pTeamCity->QueueBuild( strBranchname, strUsername, strPassword );
 }
 
 TeamCity::TeamCity(bool bVerbose)
@@ -52,7 +51,7 @@ TeamCity::~TeamCity()
    curl_global_cleanup();
 }
 
-bool TeamCity::QueueBuild( const std::string& strBranchName, const std::string& strUsername, const std::string& strPassword )
+int TeamCity::QueueBuild( const std::string& strBranchName, const std::string& strUsername, const std::string& strPassword )
 {
    CURL *curl;
    CURLcode res;
@@ -61,7 +60,7 @@ bool TeamCity::QueueBuild( const std::string& strBranchName, const std::string& 
 
    curl = curl_easy_init();
    if( !curl )
-      return false;
+      return -1;
 
    curl_easy_setopt(curl, CURLOPT_URL, strURL.c_str());
 
@@ -98,8 +97,7 @@ bool TeamCity::QueueBuild( const std::string& strBranchName, const std::string& 
 
    curl_easy_cleanup(curl);
 
-   return static_cast<int>(http_code) == 200;
-   return false;
+   return static_cast<int>( http_code );
 }
 
 

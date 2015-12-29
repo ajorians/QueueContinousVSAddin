@@ -13,7 +13,7 @@ public:
    TeamCity(bool bVerbose);
    ~TeamCity();
 
-   bool QueueBuild(const std::string& strBranchName, const std::string& strUsername, const std::string& strPassword);
+   int QueueBuild(const std::string& strBranchName, const std::string& strUsername, const std::string& strPassword);
 
 protected:
    

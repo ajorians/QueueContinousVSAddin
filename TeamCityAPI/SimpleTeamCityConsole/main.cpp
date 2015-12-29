@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
    if( !QueueBuild )
       return 0;
 
-   QueueBuild( pTeamCity, "feature/JumpLists");
+   QueueBuild( pTeamCity, "feature/JumpLists", "a.orians", "1!Smajjmd");
 
    ///
 
