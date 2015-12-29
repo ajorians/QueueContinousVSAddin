@@ -61,6 +61,7 @@ END_COM_MAP()
 
 BEGIN_MSG_MAP(QueueContinousExtensionWindowPane)
 	COMMAND_HANDLER(IDC_CLICKME_BTN, BN_CLICKED, OnButtonClick)
+   COMMAND_HANDLER( IDC_BTN_OPTIONS, BN_CLICKED, OnClickOptionsPersist )
 	MESSAGE_HANDLER(WM_CTLCOLORDLG, OnCtlColorDlg)
 END_MSG_MAP()
 
@@ -80,8 +81,56 @@ END_MSG_MAP()
 
       m_Timer = ::SetTimer( m_hWnd, 1234, 30'000, OnTimer );
 
-      ::SetDlgItemText( m_hWnd, IDC_EDIT_USERNAME, _T( "a.orians" ) );
-      ::SetDlgItemText( m_hWnd, IDC_EDIT_PASSWORD, _T( "1!Smajjmd" ) );
+      HKEY hKey;
+      if ( RegOpenKeyEx( HKEY_CURRENT_USER, L"SOFTWARE\\AJ\\QueueContinousExtension", 0, KEY_READ, &hKey ) != ERROR_SUCCESS )
+      {
+         return;
+      }
+
+      DWORD type;
+      DWORD cbData;
+      if ( RegQueryValueEx( hKey, L"Username", NULL, &type, NULL, &cbData ) != ERROR_SUCCESS )
+      {
+         RegCloseKey( hKey );
+         return;
+      }
+
+      if ( type != REG_SZ )
+      {
+         RegCloseKey( hKey );
+         return;
+      }
+
+      LPTSTR pStr = m_strUsername.GetBuffer( MAX_PATH );
+      if ( RegQueryValueEx( hKey, L"Username", NULL, NULL, (LPBYTE)pStr, &cbData ) != ERROR_SUCCESS )
+      {
+         RegCloseKey( hKey );
+         return;
+      }
+
+      //Password
+      if ( RegQueryValueEx( hKey, L"Password", NULL, &type, NULL, &cbData ) != ERROR_SUCCESS )
+      {
+         RegCloseKey( hKey );
+         return;
+      }
+
+      if ( type != REG_SZ )
+      {
+         RegCloseKey( hKey );
+         return;
+      }
+
+      LPTSTR pStrPassword = m_strPassword.GetBuffer( MAX_PATH );
+      if ( RegQueryValueEx( hKey, L"Password", NULL, NULL, (LPBYTE)pStrPassword, &cbData ) != ERROR_SUCCESS )
+      {
+         RegCloseKey( hKey );
+         return;
+      }
+
+      RegCloseKey( hKey );
+
+      
 	}
 
 	// Function called by VsWindowPaneFromResource at the end of ClosePane.
@@ -120,7 +169,7 @@ END_MSG_MAP()
 			iLeft = 5;
 		}
 
-		int iTop = (h - buttonRectangle.bottom) / 2; 
+      int iTop = 85;//buttonRectangle.top;// ( h - buttonRectangle.bottom ) / 2;
 		if (iTop <= 0)
 		{
 			iTop = 5;
@@ -136,6 +185,58 @@ END_MSG_MAP()
 		bHandled = TRUE;
 		return 0;
 	}
+
+   LRESULT OnClickOptionsPersist( WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& bHandled )
+   {
+      bHandled = TRUE;
+
+      BOOL bVisible = GetDlgItem( IDC_EDIT_USERNAME ).IsWindowVisible();
+      if ( bVisible )
+      {
+         //Persist
+         CRegKey regKey;
+         regKey.Create( HKEY_CURRENT_USER, L"SOFTWARE\\AJ\\QueueContinousExtension" );
+
+         if ( ERROR_SUCCESS == regKey.Open( HKEY_CURRENT_USER, L"SOFTWARE\\AJ\\QueueContinousExtension", KEY_WRITE ) )
+         {
+            CString strUsername;
+            GetDlgItem( IDC_EDIT_USERNAME ).GetWindowTextW( strUsername );
+            regKey.SetStringValue( L"Username", strUsername );
+            m_strUsername = strUsername;
+
+            CString strPassword;
+            GetDlgItem( IDC_EDIT_PASSWORD ).GetWindowTextW( strPassword );
+            regKey.SetStringValue( L"Password", strPassword );
+            m_strPassword = strPassword;
+
+            regKey.Close();
+         }
+
+         GetDlgItem( IDC_BTN_OPTIONS ).SetWindowTextW( L"Options" );
+      }
+      else
+      {
+         GetDlgItem( IDC_EDIT_USERNAME ).SetWindowTextW( m_strUsername );
+         GetDlgItem( IDC_EDIT_PASSWORD ).SetWindowTextW( m_strPassword );
+
+         GetDlgItem( IDC_BTN_OPTIONS ).SetWindowTextW( L"Persist" );
+      }
+
+      UINT arrItems[] =
+      {
+         IDC_STATIC_USERNAME,
+         IDC_EDIT_USERNAME,
+         IDC_STATIC_PASSWORD,
+         IDC_EDIT_PASSWORD
+      };
+
+      for ( int i = 0; i < sizeof( arrItems ) / sizeof( arrItems[0] ); i++ )
+      {
+         GetDlgItem( arrItems[i] ).ShowWindow( !bVisible );
+      }
+
+      return 0;
+   }
 
 	// Handled to set the color that should be used to draw the background of the Window Pane.
 	LRESULT OnCtlColorDlg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
@@ -270,6 +371,15 @@ END_MSG_MAP()
       return S_OK;
    }
 
+   void AppendText( const CString& str )
+   {
+      CString strText;
+      GetDlgItem( IDC_EDIT_DEBUG ).GetWindowTextW( strText );
+      strText += str;
+      strText += L"\r\n";
+      GetDlgItem( IDC_EDIT_DEBUG ).SetWindowTextW( strText );
+   }
+
    bool QueueContinous()
    {
       typedef void*	TeamCityAPI;
@@ -290,6 +400,7 @@ END_MSG_MAP()
       if ( !library.Load() )
       {
          DWORD dwLastError = GetLastError();
+         AppendText( L"Couldn't open TeamCity library" );
          return false;
       }
 
@@ -308,19 +419,20 @@ END_MSG_MAP()
       CT2CA pszConvertedAnsiString( strCurrentBranch );
       std::string strStd( pszConvertedAnsiString );
 
-      CString strUsername, strPassword;
+      /*CString strUsername, strPassword;
       ::GetDlgItemText( m_hWnd, IDC_EDIT_USERNAME, strUsername.GetBuffer(MAX_PATH), MAX_PATH );
       ::GetDlgItemText( m_hWnd, IDC_EDIT_PASSWORD, strPassword.GetBuffer( MAX_PATH ), MAX_PATH );
       strUsername.ReleaseBuffer();
-      strPassword.ReleaseBuffer();
+      strPassword.ReleaseBuffer();*/
 
-      CT2CA pszConvertedAnsiUserString( strUsername );
+      CT2CA pszConvertedAnsiUserString( m_strUsername );
       std::string strStdUsername( pszConvertedAnsiUserString );
 
-      CT2CA pszConvertedAnsiPassString( strPassword );
+      CT2CA pszConvertedAnsiPassString( m_strPassword );
       std::string strStdPassword( pszConvertedAnsiPassString );
 
       QueueBuild( pTeamCity, strStd.c_str(), strStdUsername.c_str(), strStdPassword.c_str() );
+      AppendText( L"QueueBuild called" );
 
       TeamCityFreeFunc FreeAPI = (TeamCityFreeFunc)library.Resolve( "TeamCityFree" );
       if ( !FreeAPI )
@@ -486,6 +598,8 @@ private:
    UINT_PTR m_Timer;
    static QueueContinousExtensionWindowPane* s_pThiz;
 
+   CString m_strUsername;
+   CString m_strPassword;
    CString m_strSolutionName;
    CString m_strSolutionDirectory;
 };
